@@ -1,11 +1,14 @@
 package models
 
 type TodoItem struct {
-	Title  string
-	IsDone bool
+	Uid     int
+	ListUid int
+	Title   string
+	IsDone  bool
 }
 
 type TodoList struct {
+	Uid   int
 	Title string
 	Todos []TodoItem
 }
