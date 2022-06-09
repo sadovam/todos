@@ -3,7 +3,7 @@ package repository
 import "testing"
 
 func TestMakeFakeData(t *testing.T) {
-	data := MakeFakeData()
+	data := MakeFakeData(5, 7)
 	if len(data) != 5 {
 		t.Fatalf("Generating fake data error; may create 5 lists, but creating %d", len(data))
 	}
@@ -13,7 +13,7 @@ func TestMakeFakeData(t *testing.T) {
 }
 
 func TestGetItemByUid(t *testing.T) {
-	data := MakeFakeData()
+	data := MakeFakeData(5, 7)
 	repo := NewTodosFakeRepository(data)
 	res, err := repo.GetItemByUid(3)
 
@@ -27,7 +27,7 @@ func TestGetItemByUid(t *testing.T) {
 }
 
 func TestGetItemByUidError(t *testing.T) {
-	data := MakeFakeData()
+	data := MakeFakeData(5, 7)
 	repo := NewTodosFakeRepository(data)
 	res, err := repo.GetItemByUid(13)
 
@@ -41,7 +41,7 @@ func TestGetItemByUidError(t *testing.T) {
 }
 
 func TestGetItemsByListUid(t *testing.T) {
-	data := MakeFakeData()
+	data := MakeFakeData(5, 7)
 	repo := NewTodosFakeRepository(data)
 	res, err := repo.GetItemsByListUid(3)
 
@@ -55,7 +55,7 @@ func TestGetItemsByListUid(t *testing.T) {
 }
 
 func TestGetItemsByListUidError(t *testing.T) {
-	data := MakeFakeData()
+	data := MakeFakeData(5, 7)
 	repo := NewTodosFakeRepository(data)
 	res, err := repo.GetItemsByListUid(13)
 

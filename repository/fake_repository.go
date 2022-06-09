@@ -7,11 +7,11 @@ import (
 	"github.com/sadovam/todos/models"
 )
 
-func MakeFakeData() []models.TodoList {
-	todoLists := make([]models.TodoList, 5, 5)
-	for i := 0; i < 5; i++ {
-		todos := make([]models.TodoItem, 7, 7)
-		for j := 0; j < 7; j++ {
+func MakeFakeData(totalLists, itemsPerList int) []models.TodoList {
+	todoLists := make([]models.TodoList, totalLists, totalLists)
+	for i := 0; i < totalLists; i++ {
+		todos := make([]models.TodoItem, itemsPerList, itemsPerList)
+		for j := 0; j < itemsPerList; j++ {
 			todos[j] = models.TodoItem{Uid: j, ListUid: i, Title: fmt.Sprintf("<=Item %d List %d=>", j, i), IsDone: j%3 < 2}
 		}
 		todoLists[i] = models.TodoList{Uid: i, Title: fmt.Sprintf("<<<List %d>>>", i), Todos: todos}
