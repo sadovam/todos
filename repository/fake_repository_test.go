@@ -29,12 +29,12 @@ func TestGetItemByUid(t *testing.T) {
 func TestGetItemByUidError(t *testing.T) {
 	data := MakeFakeData(5, 7)
 	repo := NewTodosFakeRepository(data)
-	res, err := repo.GetItemByUid(13)
+	res, err := repo.GetItemByUid(1333)
 
 	if err == nil {
 		t.Fatalf("GetTestItemByUid error: want error, got result uid = %d, list uid = %d", res.Uid, res.ListUid)
 	}
-	want := "Can't find todo item with id: 13"
+	want := "Can't find todo item with id: 1333"
 	if err.Error() != want {
 		t.Fatalf("GetTestItemByUid error: want %s, got %s", want, err.Error())
 	}
@@ -49,8 +49,8 @@ func TestGetItemsByListUid(t *testing.T) {
 		t.Fatalf("GetTestItemsByListUid error: %v", err.Error())
 	}
 
-	if res[2].Uid != 2 || res[2].ListUid != 3 {
-		t.Fatalf("GetTestItemsByListUid error: want uid = 3, list uid = 0, got uid = %d, list uid = %d", res[2].Uid, res[2].ListUid)
+	if res[2].Uid != 23 || res[2].ListUid != 3 {
+		t.Fatalf("GetTestItemsByListUid error: want uid = 23, list uid = 3, got uid = %d, list uid = %d", res[2].Uid, res[2].ListUid)
 	}
 }
 
