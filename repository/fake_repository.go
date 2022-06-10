@@ -28,15 +28,15 @@ func NewTodosFakeRepository(dataset []models.TodoList) TodosFake {
 	return TodosFake{data: dataset}
 }
 
-func (repo TodosFake) GetItemByUid(uid int) (models.TodoItem, error) {
+func (repo TodosFake) GetItemByUid(uid int) (*models.TodoItem, error) {
 	for _, list := range repo.data {
 		for _, item := range list.Todos {
 			if item.Uid == uid {
-				return item, nil
+				return &item, nil
 			}
 		}
 	}
-	return models.TodoItem{}, errors.New(fmt.Sprintf("Can't find todo item with id: %d", uid))
+	return nil, errors.New(fmt.Sprintf("Can't find todo item with id: %d", uid))
 }
 
 func (repo TodosFake) GetItemsByListUid(listUid int) ([]models.TodoItem, error) {
