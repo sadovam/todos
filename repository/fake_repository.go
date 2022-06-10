@@ -47,3 +47,13 @@ func (repo TodosFake) GetItemByUid(uid int) (*models.TodoItem, error) {
 	}
 	return nil, errors.New(fmt.Sprintf("TodoItem with uid: %d doesn't exist", uid))
 }
+
+func (repo TodosFake) GetListByUid(listUid int) (*models.TodoList, error) {
+	for _, list := range repo.data {
+		if listUid == list.Uid {
+			return &list, nil
+		}
+	}
+
+	return nil, errors.New(fmt.Sprintf("List with uid: %d doesn't exist", listUid))
+}

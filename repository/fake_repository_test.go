@@ -23,11 +23,11 @@ func TestGetItemByUid(t *testing.T) {
 	res, err := repo.GetItemByUid(23)
 
 	if err != nil {
-		t.Fatalf("GetTestItemByUid error: %v", err.Error())
+		t.Fatalf("GetItemByUid error: %v", err.Error())
 	}
 
 	if res.Uid != 23 {
-		t.Fatalf("GetTestItemByUid error: want uid = %d, got uid = %d", 23, res.Uid)
+		t.Fatalf("GetItemByUid error: want uid = %d, got uid = %d", 23, res.Uid)
 	}
 }
 
@@ -37,10 +37,38 @@ func TestGetItemByUidError(t *testing.T) {
 	res, err := repo.GetItemByUid(15)
 
 	if err == nil {
-		t.Fatalf("GetTestItemByUid error: want error, got result uid = %d", res.Uid)
+		t.Fatalf("GetItemByUid error: want error, got result uid = %d", res.Uid)
 	}
 	want := fmt.Sprintf("TodoItem with uid: %d doesn't exist", 15)
 	if err.Error() != want {
-		t.Fatalf("GetTestItemByUid error: want %s, got %s", want, err.Error())
+		t.Fatalf("GetItemByUid error: want %s, got %s", want, err.Error())
+	}
+}
+
+func TestGetListByUid(t *testing.T) {
+	data := MakeFakeData(5, 2)
+	repo := NewTodosFakeRepository(data)
+	res, err := repo.GetListByUid(3)
+
+	if err != nil {
+		t.Fatalf("GetListByUid error: %v", err.Error())
+	}
+
+	if res.Uid != 3 {
+		t.Fatalf("GetlistByUid error: want uid = %d, got uid = %d", 3, res.Uid)
+	}
+}
+
+func TestGetListByUidError(t *testing.T) {
+	data := MakeFakeData(2, 4)
+	repo := NewTodosFakeRepository(data)
+	res, err := repo.GetListByUid(5)
+
+	if err == nil {
+		t.Fatalf("GetListByUid error: want error, got result uid = %d", res.Uid)
+	}
+	want := fmt.Sprintf("List with uid: %d doesn't exist", 5)
+	if err.Error() != want {
+		t.Fatalf("GetListByUid error: want %s, got %s", want, err.Error())
 	}
 }
