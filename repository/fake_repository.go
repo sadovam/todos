@@ -57,3 +57,27 @@ func (repo TodosFake) GetListByUid(listUid int) (*models.TodoList, error) {
 
 	return nil, errors.New(fmt.Sprintf("List with uid: %d doesn't exist", listUid))
 }
+
+func (repo TodosFake) findMaxItemUid() int {
+	maxUid := 0
+
+	for _, list := range repo.data {
+		for _, item := range list.Todos {
+			if item.Uid > maxUid {
+				maxUid = item.Uid
+			}
+		}
+	}
+
+	return maxUid
+}
+
+func (repo TodosFake) findMaxListUid() int {
+	maxUid := 0
+	for _, list := range repo.data {
+		if list.Uid > maxUid {
+			maxUid = list.Uid
+		}
+	}
+	return maxUid
+}

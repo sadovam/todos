@@ -72,3 +72,23 @@ func TestGetListByUidError(t *testing.T) {
 		t.Fatalf("GetListByUid error: want %s, got %s", want, err.Error())
 	}
 }
+
+func TestFindMaxItemUid(t *testing.T) {
+	data := MakeFakeData(5, 3)
+	repo := NewTodosFakeRepository(data)
+	res := repo.findMaxItemUid()
+
+	if res != 14 {
+		t.Fatalf("findMaxItemUid error: want %d, got %d", 14, res)
+	}
+}
+
+func TestFindMaxListUid(t *testing.T) {
+	data := MakeFakeData(7, 2)
+	repo := NewTodosFakeRepository(data)
+	res := repo.findMaxListUid()
+
+	if res != 6 {
+		t.Fatalf("findMaxItemUid error: want %d, got %d", 6, res)
+	}
+}
