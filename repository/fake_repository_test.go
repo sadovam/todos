@@ -3,6 +3,8 @@ package repository
 import (
 	"fmt"
 	"testing"
+
+	"github.com/sadovam/todos/models"
 )
 
 func TestMakeFakeData(t *testing.T) {
@@ -29,6 +31,7 @@ func TestGetItemByUid(t *testing.T) {
 	if res.Uid != 23 {
 		t.Fatalf("GetItemByUid error: want uid = %d, got uid = %d", 23, res.Uid)
 	}
+
 }
 
 func TestGetItemByUidError(t *testing.T) {
@@ -91,4 +94,58 @@ func TestFindMaxListUid(t *testing.T) {
 	if res != 6 {
 		t.Fatalf("findMaxItemUid error: want %d, got %d", 6, res)
 	}
+}
+
+func TestCreateItem(t *testing.T) {
+	data := MakeFakeData(3, 4)
+	repo := NewTodosFakeRepository(data)
+	got, err := repo.CreateItem(1, "New todo item")
+
+	if err != nil {
+		t.Fatalf("CreateItem error: %v", err.Error())
+	}
+
+	want := &models.TodoItem{Uid: 12, ListUid: 1, Title: "New todo item", IsDone: false}
+
+	if !want.IsEqual(got) {
+		t.Fatalf("CreateItem error: want %v, got %v", want, got)
+	}
+
+	inList, err := repo.GetItemByUid(12)
+
+	if err != nil {
+		t.Fatalf("CreateItem error while trying to get new item from list: %v", err.Error())
+	}
+
+	if !inList.IsSame(got) {
+		t.Fatalf("CreateItem error: want %v, got %v", inList, got)
+	}
+
+}
+
+func TestCreateList(t *testing.T) {
+	data := MakeFakeData(3, 2)
+	repo := NewTodosFakeRepository(data)
+	got, err := repo.CreateList("New todo list")
+
+	if err != nil {
+		t.Fatalf("CreateList error: %v", err.Error())
+	}
+
+	want := &models.TodoList{Uid: 3, Title: "New todo list", Todos: make([]*models.TodoItem, 0)}
+
+	if !want.IsEqual(got) {
+		t.Fatalf("CreateList error: want %v, got %v", want, got)
+	}
+
+	inData, err := repo.GetListByUid(3)
+
+	if err != nil {
+		t.Fatalf("CreateList error while trying to get new item from list: %v", err.Error())
+	}
+
+	if !inData.IsSame(got) {
+		t.Fatalf("CreateList error: want %v, got %v", inData, got)
+	}
+
 }

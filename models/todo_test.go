@@ -42,19 +42,19 @@ func TestTodoItemIsSame(t *testing.T) {
 
 func TestTodoListIsEqual(t *testing.T) {
 
-	todos1 := []TodoItem{
+	todos1 := []*TodoItem{
 		{Uid: 12, ListUid: 2, Title: "TodoItem12", IsDone: false},
 		{Uid: 1, ListUid: 2, Title: "TodoItem12", IsDone: false},
 		{Uid: 12, ListUid: 3, Title: "TodoItem12", IsDone: false},
 	}
 
-	todos2 := []TodoItem{
+	todos2 := []*TodoItem{
 		{Uid: 12, ListUid: 2, Title: "TodoItem12", IsDone: false},
 		{Uid: 12, ListUid: 2, Title: "Todo12", IsDone: false},
 		{Uid: 12, ListUid: 2, Title: "TodoItem12", IsDone: true},
 	}
 
-	todos3 := []TodoItem{
+	todos3 := []*TodoItem{
 		{Uid: 12, ListUid: 2, Title: "TodoItem12", IsDone: false},
 		{Uid: 12, ListUid: 2, Title: "Todo12", IsDone: false},
 	}
@@ -80,19 +80,19 @@ func TestTodoListIsEqual(t *testing.T) {
 }
 
 func TestTodoListIsSame(t *testing.T) {
-	todos1 := []TodoItem{
+	todos1 := []*TodoItem{
 		{Uid: 12, ListUid: 2, Title: "TodoItem12", IsDone: false},
 		{Uid: 1, ListUid: 2, Title: "TodoItem12", IsDone: false},
 		{Uid: 12, ListUid: 3, Title: "TodoItem12", IsDone: false},
 	}
 
-	todos2 := []TodoItem{
+	todos2 := []*TodoItem{
 		{Uid: 12, ListUid: 2, Title: "TodoItem12", IsDone: false},
 		{Uid: 12, ListUid: 2, Title: "Todo12", IsDone: false},
 		{Uid: 12, ListUid: 2, Title: "TodoItem12", IsDone: true},
 	}
 
-	todos3 := []TodoItem{
+	todos3 := []*TodoItem{
 		{Uid: 12, ListUid: 2, Title: "TodoItem12", IsDone: false},
 		{Uid: 12, ListUid: 2, Title: "Todo12", IsDone: false},
 	}

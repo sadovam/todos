@@ -23,7 +23,7 @@ func (item1 *TodoItem) IsSame(item2 *TodoItem) bool {
 type TodoList struct {
 	Uid   int
 	Title string
-	Todos []TodoItem
+	Todos []*TodoItem
 }
 
 func (list1 *TodoList) IsEqual(list2 *TodoList) bool {
@@ -32,7 +32,7 @@ func (list1 *TodoList) IsEqual(list2 *TodoList) bool {
 	}
 
 	for i, item := range list1.Todos {
-		if !item.IsEqual(&list2.Todos[i]) {
+		if !item.IsEqual(list2.Todos[i]) {
 			return false
 		}
 	}
