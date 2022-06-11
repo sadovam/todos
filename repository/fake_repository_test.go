@@ -284,3 +284,84 @@ func TestUpdateListError(t *testing.T) {
 		t.Fatalf("UpdateList error: want %s, got %s", want, err.Error())
 	}
 }
+
+func TestDeleteItem(t *testing.T) {
+	data := MakeFakeData(3, 4)
+	repo := NewTodosFakeRepository(data)
+	got, err := repo.DeleteItem(7)
+
+	if err != nil {
+		t.Fatalf("DeleteItem error: %v", err.Error())
+	}
+
+	want := &models.TodoItem{Uid: 7, ListUid: 1, Title: "<=Item 7 List 1=>", IsDone: true}
+
+	if !want.IsEqual(got) {
+		t.Fatalf("DeleteItem error: want %v, got %v", want, got)
+	}
+
+	inList, err := repo.GetItemByUid(7)
+
+	if err == nil {
+		t.Fatalf("DeleteItem error: while trying to get it from list want error, got: %v", inList)
+	}
+}
+
+func TestDeleteItemError(t *testing.T) {
+	data := MakeFakeData(2, 4)
+	repo := NewTodosFakeRepository(data)
+	res, err := repo.DeleteItem(15)
+
+	if err == nil {
+		t.Fatalf("DeleteItem error: want error, got result uid = %d", res.Uid)
+	}
+	want := fmt.Sprintf("TodoItem with uid: %d doesn't exist", 15)
+	if err.Error() != want {
+		t.Fatalf("DeleteItem error: want %s, got %s", want, err.Error())
+	}
+}
+
+func TestDeleteList(t *testing.T) {
+	data := MakeFakeData(3, 2)
+	repo := NewTodosFakeRepository(data)
+	repo.DeleteItem(4)
+	repo.DeleteItem(5)
+	got, err := repo.DeleteList(2)
+
+	if err != nil {
+		t.Fatalf("DeleteList error: %v", err.Error())
+	}
+
+	if got.Uid != 2 {
+		t.Fatalf("DeleteList error: want list with uid %d, got %d", 2, got.Uid)
+	}
+
+	inData, err := repo.GetListByUid(2)
+
+	if err == nil {
+		t.Fatalf("DeleteList error: while trying to get it from data want error, got: %v", inData)
+	}
+}
+
+func TestDeleteListError(t *testing.T) {
+	data := MakeFakeData(2, 4)
+	repo := NewTodosFakeRepository(data)
+	res, err := repo.DeleteList(15)
+
+	if err == nil {
+		t.Fatalf("DeleteList error: want error, got result uid = %d", res.Uid)
+	}
+	want := fmt.Sprintf("TodoList with uid: %d doesn't exist", 15)
+	if err.Error() != want {
+		t.Fatalf("DeleteList error: want %s, got %s", want, err.Error())
+	}
+
+	res, err = repo.DeleteList(0)
+	if err == nil {
+		t.Fatalf("DeleteList error: want error, got result uid = %d", res.Uid)
+	}
+	want = fmt.Sprintf("TodoList with uid: %d doesn't empty", 0)
+	if err.Error() != want {
+		t.Fatalf("DeleteList error: want %s, got %s", want, err.Error())
+	}
+}

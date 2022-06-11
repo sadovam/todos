@@ -164,3 +164,30 @@ func (repo *TodosFake) UpdateList(listUid int, title string) (*models.TodoList, 
 	list.Title = title
 	return list, nil
 }
+
+func (repo *TodosFake) DeleteItem(uid int) (*models.TodoItem, error) {
+	for _, list := range repo.data {
+		for i, item := range list.Todos {
+			if item.Uid == uid {
+				list.Todos = append(list.Todos[:i], list.Todos[i+1:]...)
+				return item, nil
+			}
+		}
+	}
+
+	return nil, errors.New(fmt.Sprintf("TodoItem with uid: %d doesn't exist", uid))
+}
+
+func (repo *TodosFake) DeleteList(listUid int) (*models.TodoList, error) {
+	for i, list := range repo.data {
+		if list.Uid == listUid {
+			if len(list.Todos) > 0 {
+				return nil, errors.New(fmt.Sprintf("TodoList with uid: %d doesn't empty", listUid))
+			}
+			repo.data = append(repo.data[:i], repo.data[i+1:]...)
+			return list, nil
+		}
+	}
+
+	return nil, errors.New(fmt.Sprintf("TodoList with uid: %d doesn't exist", listUid))
+}
