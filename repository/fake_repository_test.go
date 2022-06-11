@@ -177,3 +177,76 @@ func TestCreateListError(t *testing.T) {
 		t.Fatalf("CreateList error: want %s, got %s", want, err.Error())
 	}
 }
+
+func TestUpdateItem(t *testing.T) {
+	data := MakeFakeData(3, 4)
+	repo := NewTodosFakeRepository(data)
+	got, err := repo.UpdateItem(7, 0, "New todo item", false)
+
+	if err != nil {
+		t.Fatalf("UpdateItem error: %v", err.Error())
+	}
+
+	want := &models.TodoItem{Uid: 7, ListUid: 0, Title: "New todo item", IsDone: false}
+
+	if !want.IsEqual(got) {
+		t.Fatalf("UpdateItem error: want %v, got %v", want, got)
+	}
+
+	inList, err := repo.GetItemByUid(7)
+
+	if err != nil {
+		t.Fatalf("UpdateItem error while trying to get new item from list: %v", err.Error())
+	}
+
+	if !inList.IsSame(got) {
+		t.Fatalf("UpdateItem error: want %v, got %v", inList, got)
+	}
+
+	if !repo.testOfConsistency() {
+		t.Fatal("UpdateItem error: consistensy destroyed!")
+	}
+}
+
+func TestUpdateItemError(t *testing.T) {
+	data := MakeFakeData(3, 4)
+	repo := NewTodosFakeRepository(data)
+	got, err := repo.UpdateItem(3, 7, "New todo item", false)
+
+	if err == nil {
+		t.Fatalf("UpdateItem error: want error, got result %v", got)
+	}
+
+	want := fmt.Sprintf("List with uid: %d doesn't exist", 7)
+	if err.Error() != want {
+		t.Fatalf("UpdateItem error: want %s, got %s", want, err.Error())
+	}
+
+	got, err = repo.UpdateItem(17, 0, "New todo item", false)
+
+	if err == nil {
+		t.Fatalf("UpdateItem error: want error, got result %v", got)
+	}
+
+	want = fmt.Sprintf("TodoItem with uid: %d doesn't exist", 17)
+	if err.Error() != want {
+		t.Fatalf("UpdateItem error: want %s, got %s", want, err.Error())
+	}
+}
+
+func TestTestOfConsistency(t *testing.T) {
+	data := MakeFakeData(5, 3)
+	repo := NewTodosFakeRepository(data)
+
+	res := repo.testOfConsistency()
+	if !res {
+		t.Fatalf("TestOfConsistency error: want %t, got %t", true, false)
+	}
+
+	data[1].Todos[2].ListUid = 3
+
+	res = repo.testOfConsistency()
+	if res {
+		t.Fatalf("TestOfConsistency error: want %t, got %t", false, true)
+	}
+}

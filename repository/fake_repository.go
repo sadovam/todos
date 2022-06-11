@@ -95,9 +95,7 @@ func (repo *TodosFake) CreateItem(listUid int, title string) (*models.TodoItem, 
 		Title:   title,
 		IsDone:  false,
 	}
-	fmt.Println(list)
 	list.Todos = append(list.Todos, item)
-	fmt.Println(list)
 
 	return item, nil
 }
@@ -116,4 +114,43 @@ func (repo *TodosFake) CreateList(title string) (*models.TodoList, error) {
 	repo.data = append(repo.data, list)
 
 	return list, nil
+}
+
+func (repo *TodosFake) UpdateItem(itemUid, listUid int, title string, isDone bool) (*models.TodoItem, error) {
+	item, err := repo.GetItemByUid(itemUid)
+
+	if err != nil {
+		return nil, err
+	}
+
+	oldList, _ := repo.GetListByUid(item.ListUid)
+
+	newList, err := repo.GetListByUid(listUid)
+	if err != nil {
+		return nil, err
+	}
+
+	item.ListUid = listUid
+	item.Title = title
+	item.IsDone = isDone
+
+	newList.Todos = append(newList.Todos, item)
+	for i, v := range oldList.Todos {
+		if item.Uid == v.Uid {
+			oldList.Todos = append(oldList.Todos[:i], oldList.Todos[i+1:]...)
+		}
+	}
+
+	return item, nil
+}
+
+func (repo *TodosFake) testOfConsistency() bool {
+	for _, list := range repo.data {
+		for _, item := range list.Todos {
+			if item.ListUid != list.Uid {
+				return false
+			}
+		}
+	}
+	return true
 }
