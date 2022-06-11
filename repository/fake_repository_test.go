@@ -250,3 +250,37 @@ func TestTestOfConsistency(t *testing.T) {
 		t.Fatalf("TestOfConsistency error: want %t, got %t", false, true)
 	}
 }
+
+func TestUpdateList(t *testing.T) {
+	data := MakeFakeData(3, 2)
+	repo := NewTodosFakeRepository(data)
+	res, err := repo.UpdateList(1, "Updated List")
+
+	if err != nil {
+		t.Fatalf("TestUpdateList error: %v", err.Error())
+	}
+
+	if res.Title != "Updated List" || res.Uid != 1 {
+		t.Fatalf("TestUpdateList error: want title = %s, uid = %d, got title = %s, uid = %d",
+			"Updated List", 1, res.Title, res.Uid)
+	}
+	want, _ := repo.GetListByUid(1)
+	if !want.IsSame(res) {
+		t.Fatalf("TestUpdateList error while read updated list from data: want %v, got %v", want, res)
+	}
+}
+
+func TestUpdateListError(t *testing.T) {
+	data := MakeFakeData(3, 4)
+	repo := NewTodosFakeRepository(data)
+	got, err := repo.UpdateList(5, "Updated List")
+
+	if err == nil {
+		t.Fatalf("UpdateList error: want error, got result %v", got)
+	}
+
+	want := fmt.Sprintf("List with uid: %d doesn't exist", 5)
+	if err.Error() != want {
+		t.Fatalf("UpdateList error: want %s, got %s", want, err.Error())
+	}
+}

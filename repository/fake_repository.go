@@ -154,3 +154,13 @@ func (repo *TodosFake) testOfConsistency() bool {
 	}
 	return true
 }
+
+func (repo *TodosFake) UpdateList(listUid int, title string) (*models.TodoList, error) {
+	list, err := repo.GetListByUid(listUid)
+	if err != nil {
+		return nil, err
+	}
+
+	list.Title = title
+	return list, nil
+}
