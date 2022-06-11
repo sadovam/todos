@@ -1,5 +1,7 @@
 package models
 
+import "fmt"
+
 type TodoItem struct {
 	Uid     int
 	ListUid int
@@ -46,4 +48,13 @@ func (list1 *TodoList) IsSame(list2 *TodoList) bool {
 	}
 
 	return list1.IsEqual(list2)
+}
+
+func (list *TodoList) String() string {
+	str := ""
+	for _, item := range list.Todos {
+		str += fmt.Sprintf("\tUid: %d ListUid: %d Title: %s IsDone: %t\n",
+			item.Uid, item.ListUid, item.Title, item.IsDone)
+	}
+	return fmt.Sprintf("Uid: %d Title: %s\n", list.Uid, list.Title) + str
 }
