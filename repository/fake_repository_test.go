@@ -120,7 +120,21 @@ func TestCreateItem(t *testing.T) {
 	if !inList.IsSame(got) {
 		t.Fatalf("CreateItem error: want %v, got %v", inList, got)
 	}
+}
 
+func TestCreateItemError(t *testing.T) {
+	data := MakeFakeData(3, 4)
+	repo := NewTodosFakeRepository(data)
+	got, err := repo.CreateItem(7, "New todo item")
+
+	if err == nil {
+		t.Fatalf("CreateItem error: want error, got result %v", got)
+	}
+
+	want := fmt.Sprintf("List with uid: %d doesn't exist", 7)
+	if err.Error() != want {
+		t.Fatalf("CreateItem error: want %s, got %s", want, err.Error())
+	}
 }
 
 func TestCreateList(t *testing.T) {
@@ -147,5 +161,19 @@ func TestCreateList(t *testing.T) {
 	if !inData.IsSame(got) {
 		t.Fatalf("CreateList error: want %v, got %v", inData, got)
 	}
+}
 
+func TestCreateListError(t *testing.T) {
+	data := MakeFakeData(3, 2)
+	repo := NewTodosFakeRepository(data)
+	got, err := repo.CreateList("")
+
+	if err == nil {
+		t.Fatalf("CreateList error: want error, got result %v", got)
+	}
+
+	want := "Title can't be empty"
+	if err.Error() != want {
+		t.Fatalf("CreateList error: want %s, got %s", want, err.Error())
+	}
 }
