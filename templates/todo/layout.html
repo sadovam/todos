@@ -1,0 +1,31 @@
+{{define "layout" -}}
+<h1>{{.Title}}</h1>
+<ul id="layout__todos">
+    {{range .Todos}}
+        {{template "todo" . -}}
+    {{end}}
+</ul>
+
+<form id="layout__form">
+        <label>Title:</label><br />
+        <input id="layout__input" type="text" name="title"><br />
+        <button onclick="layout__on_click(event)">Add</button>
+</form>
+<script>
+    const layout__on_click = (e) => {
+      e.preventDefault();
+      input = document.getElementById("layout__input")
+      form = document.getElementById("layout__form")
+      fetch("/todo", {method: "post", body: new FormData(form)})
+      .then((response) => {
+        return response.text();
+      })
+      .then((data) => {
+        document.getElementById("layout__todos")
+        .insertAdjacentHTML("beforeend", data);
+      });
+      input.value = ""
+      
+    };
+</script>
+{{end}}
