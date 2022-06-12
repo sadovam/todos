@@ -16,13 +16,13 @@ func MakeFakeData(totalLists, itemsPerList int) []*models.TodoList {
 			todos[j] = &models.TodoItem{
 				Uid:     uid,
 				ListUid: i,
-				Title:   fmt.Sprintf("<=Item %d List %d=>", uid, i),
+				Title:   fmt.Sprintf("Item %d List %d", uid, i),
 				IsDone:  uid%3 < 2,
 			}
 		}
 		todoLists[i] = &models.TodoList{
 			Uid:   i,
-			Title: fmt.Sprintf("<<<List %d>>>", i),
+			Title: fmt.Sprintf("List %d", i),
 			Todos: todos,
 		}
 	}
