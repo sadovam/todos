@@ -135,6 +135,17 @@ func TestCreateItemError(t *testing.T) {
 	if err.Error() != want {
 		t.Fatalf("CreateItem error: want %s, got %s", want, err.Error())
 	}
+
+	got, err = repo.CreateItem(2, "")
+
+	if err == nil {
+		t.Fatalf("CreateItem error: want error, got result %v", got)
+	}
+
+	want = "Title can't be empty"
+	if err.Error() != want {
+		t.Fatalf("CreateList error: want %s, got %s", want, err.Error())
+	}
 }
 
 func TestCreateList(t *testing.T) {
@@ -294,7 +305,7 @@ func TestDeleteItem(t *testing.T) {
 		t.Fatalf("DeleteItem error: %v", err.Error())
 	}
 
-	want := &models.TodoItem{Uid: 7, ListUid: 1, Title: "<=Item 7 List 1=>", IsDone: true}
+	want := &models.TodoItem{Uid: 7, ListUid: 1, Title: "Item 7 List 1", IsDone: true}
 
 	if !want.IsEqual(got) {
 		t.Fatalf("DeleteItem error: want %v, got %v", want, got)

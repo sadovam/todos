@@ -83,6 +83,10 @@ func (repo *TodosFake) findMaxListUid() int {
 }
 
 func (repo *TodosFake) CreateItem(listUid int, title string) (*models.TodoItem, error) {
+	if title == "" {
+		return nil, errors.New("Title can't be empty")
+	}
+
 	list, err := repo.GetListByUid(listUid)
 	if err != nil {
 		return nil, err
